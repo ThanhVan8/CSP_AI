@@ -2,6 +2,8 @@ class CSP:
     assignment = {}
     def __init__(self):
         s = open("input.txt").read()
+        
+        # xử lý đầu vào bỏ dấu ngoặc
         inp = s.split("=")
         # result = TWO
         self.result = inp[1]
@@ -21,8 +23,6 @@ class CSP:
         self.maxStep = max(max((len(op) for op in self.operands)), (len(self.result)))
         self.leadingLetters = set(x[0] for x in self.operands)  # first letter of each operands
         self.leadingLetters.add((self.result[0]))
-        
-        
     
     def isAssigned(self, letter):
         return True if letter in self.assignment else False
@@ -90,16 +90,20 @@ class CSP:
         else:   # handle the result (right side of '=')
             if(abs(-step-1) > len(self.result)):
                 char = '0'
+                # self.assignment[char] = str(0)
             else: char = self.result[-step-1] # get the character of result
 
             # xử lý kq âm
             tmpCarry = 0
+            # Nếu resStep = 10 --> standard = 20
             if(resStep<0):
                 tmp = resStep
                 standard = 0
                 while(abs(tmp)!=0):
                     standard +=10
                     tmp = int(tmp/10)
+                if(resStep%10 == 0):
+                    standard -= 10 
                 resStep = standard + resStep
                 tmpCarry = -int(standard / 10)
                 
@@ -110,16 +114,28 @@ class CSP:
             else: 
                 carryNext = int(strRes[0:len(strRes)-1])
             # đối với giá trị 
-            if(char =='0' and correctDigit ==0):
-                return True
-            elif (char== '0' and correctDigit !=0):
-                return False
+            if(char == '0'):
+                if(correctDigit==0):
+                    isSuccess = self.backtrack(step + 1, 0, carryNext, carryNext) # go to next step
+                    if(isSuccess):
+                        return True
+                else:
+                    # self.assignment[char] = str(0)
+                    return False                
+
+            # if(char =='0' and correctDigit ==0):
+            #     isSuccess = self.backtrack(step + 1, 0, carryNext, carryNext) # go to next step
+            #     if(isSuccess):             
+            #         return True          
+            # elif (char =='0' and correctDigit ==0):
+                
+            # else: return False
             if self.isAssigned(char):   # if already assigned
                 if self.assignment.get(char) == correctDigit:   # if the value of assigned letter is valid
                     isSuccess = self.backtrack(step + 1, 0, carryNext, carryNext) # go to next step
                     if isSuccess:
                         return True
-            else:   # if not assigned yet
+            else: # if not assigned yet
                 if self.checkConstraints(char, correctDigit):
                     self.assignment[char] = correctDigit
                     isSuccess = self.backtrack(step + 1, 0, carryNext, carryNext)  # go to next step
