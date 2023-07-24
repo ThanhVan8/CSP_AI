@@ -56,7 +56,10 @@ class CSP:
         # print(step,row)
         # print(self.assignment)
         if step > self.maxStep - 1:
-            return True
+            if carry == 0:
+                return True
+            else:
+                return False
                 
         if row <= len(self.operands) - 1: # handle the operands (left side of '=')
             if step > len(self.operands[row]) - 1: # if go beyond the first letter of current operand
@@ -89,7 +92,7 @@ class CSP:
             if resStep < 0:
                 tmp = 0
                 if abs(resStep) % 10 == 0:
-                    tmp = abs(resStep) / 10
+                    tmp = abs(resStep) // 10
                 else:
                     tmp = len(strRes) - 1
                 correctDigit = tmp*10 + resStep
