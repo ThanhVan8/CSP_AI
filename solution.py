@@ -1,7 +1,31 @@
 class CSP:
     assignment = {}
     def __init__(self):
-        s = open("input.txt").read()
+        data = open("input.txt").read()
+
+        s = ""
+        operand_sign = 0
+        #operand_sign
+        for i in range(0, len(data)):
+            if data[i].isalpha():
+                s += data[i]
+            else:
+                if data[i] == '(':
+                    if i > 0 and data[i-1] == '-':
+                        operand_sign = 1
+                    continue
+                if data[i] == ')':
+                    operand_sign = 0
+                    continue
+
+                if operand_sign == 1:
+                    if data[i] == '+':
+                        s += '-'
+                    else:
+                        if data[i] == '-':
+                            s += '+'
+                else:
+                    s += data[i]
         
         inp = s.split("=")
         self.result = inp[1]
