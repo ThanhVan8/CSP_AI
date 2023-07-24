@@ -3,9 +3,7 @@ class CSP:
     def __init__(self):
         s = open("input.txt").read()
         
-        # xử lý đầu vào bỏ dấu ngoặc
         inp = s.split("=")
-        # result = TWO
         self.result = inp[1]
 
         self.operators = []
@@ -60,8 +58,11 @@ class CSP:
     # carry
     def backtrack(self, step, row, resStep, carry):
         # điểm dừng
-        if step > self.maxStep - 1:
+        if step > self.maxStep - 1 and carry == 0:
             return True
+        # at max step still have carry
+        elif (step > self.maxStep - 1 and carry != 0):
+            return False
                 
         if row <= len(self.operands) - 1: # handle the operands (left side of '=')
             if step > len(self.operands[row]) - 1: # if go beyond the first letter of current operand (vượt ra ngoài)
@@ -94,9 +95,9 @@ class CSP:
                 # self.assignment[char] = str(0)
             else: char = self.result[-step-1] # get the character of result
 
-            # xử lý kq âm
+            # compute negative result
             tmpCarry = 0
-            # Nếu resStep = 10 --> standard = 20
+            # if resStep = 10,20,30 --> standard = 10,20,30
             if(resStep<0):
                 tmp = abs(int(resStep/10))
                 if((resStep % 10) != 0):
@@ -107,7 +108,7 @@ class CSP:
                 
             strRes = str(resStep)  # convert result of current column to string
             correctDigit = int(strRes[-1])  # get the last digit
-            # carryNext = tmpCarry
+
             if correctDigit == resStep: # if the result has 1 digit
                 carryNext = tmpCarry
             else: 
@@ -127,6 +128,7 @@ class CSP:
                     isSuccess = self.backtrack(step + 1, 0, carryNext, carryNext) # go to next step
                     if isSuccess:
                         return True
+                    
             else: # if not assigned yet
                 if self.checkConstraints(char, correctDigit):
                     self.assignment[char] = correctDigit
