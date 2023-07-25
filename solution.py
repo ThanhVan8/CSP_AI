@@ -1,4 +1,3 @@
-import re
 class CSP:
     assignment = {}
     def __init__(self):
@@ -6,7 +5,6 @@ class CSP:
 
         s = ""
         operand_sign = 0
-        #operand_sign
         for i in range(0, len(data)):
             if data[i].isalpha():
                 s += data[i]
@@ -45,7 +43,7 @@ class CSP:
 
         self.maxStep = max(max((len(op) for op in self.operands)), (len(self.result)))
         self.leadingLetters = set(x[0] for x in self.operands)  # first letter of each operands
-        self.leadingLetters.add((self.result[0]))
+        self.leadingLetters.add((self.result[0]))   # first letter of result
     
     def isAssigned(self, letter):
         return True if letter in self.assignment else False
@@ -58,8 +56,6 @@ class CSP:
                 res += val
             elif self.operators[row - 1] == '-':
                 res -= val
-            elif self.operators[row - 1] == '*':
-                multiRes *= val
         return res
 
     def checkConstraints(self, letter, value):
@@ -136,7 +132,7 @@ class CSP:
             else: 
                 carryNext = int(strRes[0:len(strRes)-1])
 
-            if step + 1 > len(self.result):
+            if step + 1 > len(self.result): # if go beyond the first letter of result
                 if correctDigit == 0:
                     isSuccess = self.backtrack(step + 1, 0, carryNext, carryNext) # go to next step
                     if isSuccess:
