@@ -15,7 +15,7 @@ def solve_cryptarithmetic(puzzle):
     operands = []
     operandTmp = ""   
     for i in inp[0]:
-        if(i.isalpha()):
+        if i.isalpha():
             operandTmp += i
         else:
             operators.append(i)
