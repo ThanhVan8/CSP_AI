@@ -1,4 +1,3 @@
-import re
 class CSP:
     assignment = {}
     def __init__(self):
@@ -65,21 +64,6 @@ class CSP:
     
     def isAssigned(self, letter):
         return True if letter in self.assignment else False
-    
-    def compute(self, res, val, row, multiRes):   # compute the 'val' into 'res' at operand 'row'
-        if row == 0:
-            res += val
-        else:
-            if self.operators[row - 1] == '+':
-                # res += val
-                res += multiRes
-                multiRes = val
-            elif self.operators[row - 1] == '-':
-                res -= val
-            elif self.operators[row - 1] == '*':
-                multiRes *= val
-                
-        return res, multiRes
 
     def checkConstraints(self, letter, value):
         # gán giá trị bị trùng
@@ -91,7 +75,7 @@ class CSP:
         # các chữ cái đầu không được <0
         return True
     
-    def isConsistent(self, step, carry):
+    def computeResStep(self, step, carry):
         if step > len(self.operands[0])-1:
             resMulti = 0
         else:
@@ -114,7 +98,6 @@ class CSP:
 
         res += resMulti
         return res
-
 
     def solution(self):
         res = self.backtrack(0, 0, 0)
@@ -149,7 +132,6 @@ class CSP:
                 else:
 
                     if self.isAssigned(char):   # if already assigned
-                        # resStep = self.compute(resStep, self.assignment.get(char), row) # calculate the result
                         isSuccess = self.backtrack(step, row + 1, carry)  # go to next row
                         if isSuccess:
                             return True
@@ -157,20 +139,14 @@ class CSP:
                         for i in range(10): # from 0-9
                             if self.checkConstraints(char, i):
                                 self.assignment[char] = i
-                                # resPrev = resStep   # store the old result in case backtrack fail
-                                # resStep = self.compute(resStep, self.assignment.get(char), row)
                                 isSuccess = self.backtrack(step, row + 1, carry)  # go to next row
                                 if isSuccess:
                                     return True
                                 else:
-                                    # resStep = resPrev   # back to the old result
                                     self.assignment.pop(char)   # pop out the value causing fail 
             
         else:   # handle the result (right side of '=')
-            # print(self.assignment, step, row, carry)
-
-            resStep = self.isConsistent(step, carry)
-            # print(resStep)
+            resStep = self.computeResStep(step, carry)
 
             # compute negative result
             tmpCarry = 0
@@ -214,4 +190,3 @@ class CSP:
 problem = CSP()
 res = problem.solution()
 print(res)
-# print(problem.operands)
