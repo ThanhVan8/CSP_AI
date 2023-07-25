@@ -1,4 +1,4 @@
-def ReadFile():    
+def readFile():    
     f = open("input.txt", 'r')
     data = f.read()
     f.close()
@@ -42,7 +42,6 @@ def solve_cryptarithmetic(puzzle):
         right = sum_word(result, assignment)
         return left == right
 
-
     def backtrack(index, assignment, used_digits):
         if index == len(letters):
             return is_solution(assignment)
@@ -73,7 +72,7 @@ def solve_cryptarithmetic(puzzle):
         return False
 
 
-puzzle = ReadFile()
+puzzle = readFile()
 solution = solve_cryptarithmetic(puzzle)
 f = open("output.txt", 'w')
 if solution != False:
