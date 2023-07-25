@@ -35,7 +35,7 @@ class CSP:
         self.operands = []
         operandTmp = ""   
         for i in inp[0]:
-            if(i.isalpha()):
+            if i.isalpha():
                 operandTmp += i
             else:
                 self.operators.append(i)
@@ -69,15 +69,18 @@ class CSP:
         # gán giá trị 0 cho chữ cái đầu
         if letter in self.leadingLetters and value == 0:
             return False
-        # các chữ cái đầu không được <0
         return True
 
     def solution(self):
         res = self.backtrack(0, 0, 0, 0)
-        if res:
-            return self.assignment
-        else:
-            return None
+        f = open("output.txt", 'w')
+        if res != False:
+            sorted_solution = dict(sorted(self.assignment.items(), key=lambda x: x[0]))
+            print("Solution:")
+            for letter, digit in sorted_solution.items():
+                print(f"{letter} = {digit}")
+                f.write(str(digit))
+        f.close()
 
     # step: current column being performed
     # row: current row(operand) being performed
@@ -156,5 +159,4 @@ class CSP:
         return False
 
 problem = CSP()
-res = problem.solution()
-print(res)
+problem.solution()
