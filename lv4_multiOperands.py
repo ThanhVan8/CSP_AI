@@ -77,11 +77,8 @@ solution = solve_cryptarithmetic(puzzle)
 f = open("output.txt", 'w')
 if solution != False:
     sorted_solution = dict(sorted(solution.items(), key=lambda x: x[0]))
-    print("Solution:")
     for letter, digit in sorted_solution.items():
-        print(f"{letter} = {digit}")
         f.write(str(digit))
-        
-    f.close()
 else:
-    print(solution)
+    f.write("NO SOLUTION")
+f.close()

@@ -72,10 +72,10 @@ class CSP:
         f = open("output.txt", 'w')
         if res != False:
             sorted_solution = dict(sorted(self.assignment.items(), key=lambda x: x[0]))
-            print("Solution:")
             for letter, digit in sorted_solution.items():
-                print(f"{letter} = {digit}")
                 f.write(str(digit))
+        else:
+            f.write("NO SOLUTION")
         f.close()
 
     # step: current column being performed
